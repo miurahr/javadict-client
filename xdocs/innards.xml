@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <author email="ramon.casha@linux.org.mt">Ramon Casha</author>
+    <title>Anatomy</title>
+  </properties>
+
+  <body>
+    <section name="Anatomy">
+      <subsection name="DictClient">
+	<p>
+	  Within the DictClient class, the in and out variables are a Reader and Writer
+	  which take care of all conversion to and from UTF-8. The readLine and sendLine
+	  are functions that read and write a line, respectively (taking care of newlines).
+	</p>
+	<p>
+	  However the core function is send. This function sends a single command to the
+	  DICT server and reconstructs the response into a single, generic Response object.
+	  This takes care of the possibility of multiple response statuses, multi-line responses
+	  etc. In fact, essentially all the public functions consist of a call to send, followed
+	  by reformatting or filtering the information to send back to the user.
+	</p>
+      </subsection>
+      <subsection name="Response">
+	<p>
+	The Response class is a glorified List of SingleResponse objects. Since a single DICT
+	comman can result in multiple responses, this class collects together all the responses
+	to a single command. It has functions to return sub-lists of responses by their status
+	code.
+	</p>
+      </subsection>
+      <subsection name="SingleResponse">
+	<p>
+	  As its name implies, a SingleResponse contains all the data for a single response-code
+	  from the server, including the response code, the text following the code, and optionally,
+	  multiple lines of text following the first.
+	</p>
+	<p>
+	  Depending on the status-code itself, the SingleResponse.getInstance function will return
+	  subclasses of SingleResponse, such as ConnectResponse, DefinitionResponse or MatchResponse.
+	  These each have additional functionality to parse known response-types into variables for easier
+	  use.
+	</p>
+      </subsection>
+      <subsection name="Status">
+	<p>
+	  The Status class contains constants for all known status codes, functions to determine
+	  whether any status code is an error, is a multi-line response, or should be followed by
+	  another status code. The getMessage function returns a string message corresponding to a
+	  particular status code, suitable for displaying to the user.
+	</p>
+      </subsection>
+      <subsection name="ResponseStringIterator">
+	<p>
+	  This is a utility class which parses a string into tokens as per RFC2229's rules, namely
+	  that tokens are separated by whitespace unless they are enclosed in double-quotes.
+	</p>
+      </subsection>
+    </section>
+  </body>
+</document>
+
+
+

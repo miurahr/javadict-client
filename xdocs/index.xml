@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <author email="ramon.casha@linux.org.mt">Ramon Casha</author>
+    <title>Introduction</title>
+  </properties>
+
+  <body>
+    <section name="Introduction">
+      <p>
+	From the www.dict.org website: 
+	“The Dictionary Server protocol (DICT) is a TCP transaction based query/response protocol that allows a client to access dictionary definitions from a set of natural language dictionary databases.”
+	So, in other words, it's a client-server way to access dictionaries, as well as encyclopedias,
+	thesauri etc.
+      </p>
+      <p>
+	Several open-source DICT server applications are available, including in Java, but so far no Java
+	client were available. JavaDict-Client is a 100% Java implementation of a DICT client. See the 
+	<a href="http://www.dict.org/">www.dict.org</a> website for server software and various free
+	dictionaries.
+      </p>
+      <subsection name="Sample">
+	<source><![CDATA[DictClient client = new DictClient();
+Iterator it = client.getDefinitions(DictClient.DATABASE_ALL, "hello").iterator();
+System.out.println("Definitions of word 'Hello':");
+while(it.hasNext()) {
+  DefinitionResponse dr = (DefinitionResponse)it.next();
+  System.out.println(dr.getTextualInformation());
+}]]></source>
+    </subsection>
+      <subsection name="RFC2229 Features Implemented">
+	<p>
+	  <ul>
+	    <li>DEFINE</li>
+	    <li>MATCH</li>
+	    <li>CLIENT</li>
+	    <li>SHOW DB</li>
+	    <li>SHOW STRAT</li>
+	    <li>SHOW SERVER</li>
+	    <li>SHOW INFO</li>
+	    <li>QUIT</li>
+	    <li>STATUS</li>
+	    <li>HELP</li>
+	    <li>AUTH</li>
+	  </ul>
+	</p>
+      </subsection>
+      <subsection name="RFC2229 Features NOT Implemented (yet)">
+	<p>
+	  <ul>
+	    <li>SASLAUTH</li>
+	    <li>OPTION MIME</li>
+	  </ul>
+	</p>
+      </subsection>
+    </section>
+  </body>
+</document>
+

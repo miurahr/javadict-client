@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Maven">
+
+  <title>JavaDict-Client</title>
+
+  <body>
+
+    <links>
+      <item name="MLUG Home"		href="http://linux.org.mt/"/>
+    </links>
+
+   <menu name="Overview">
+      <item name="Introduction"		href="index.html"/>
+      <item name="Usage"		href="usage.html"/>
+      <item name="dict: URL"		href="url.html"/>
+      <item name="Anatomy"		href="innards.html"/>
+    </menu>
+
+    <menu name="Resources &amp; Links">
+     <item name="RFC2229"		href="ftp://ftp.isi.edu/in-notes/rfc2229.txt"/>
+     <item name="www.dict.org"		href="http://www.dict.org/"/>
+    </menu>
+  </body>
+</project>
+
+

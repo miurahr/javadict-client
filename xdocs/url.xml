@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <author email="ramon.casha@linux.org.mt">Ramon Casha</author>
+    <title>dict: URLs</title>
+  </properties>
+
+  <body>
+    <section name="dict: URLs">
+      <p>
+	Another way of accessing the dictionaries on a server is via a specially-constructed URL.
+	Note however that this returns ready-formatted plain text, and provides less control over the format.
+	The URLs are of the form <code>dict://[user;auth-type@]host[:port]/d:word[:database[:n]]</code>
+	or <code>dict://[user;auth-type@]host[:port]/m:word[:database[:strategy[:n]]]</code>. The first
+	is for definitions, the second is for matches.
+	The square brackets indicate parts of the URL that may be left out, and should not be specified
+	as part of the actual URL.
+      </p>
+      <p>
+	In order for this method of access to be registered with the JVM, you must add or set the string 
+	"mt.rcasha" to the system property "java.protocol.handler.pkgs". Once you have done this you
+	can construct URLs with the syntax given above using the normal java.net.URL class, and use the
+	getInputStream or getContent functions as normal.
+      </p>
+      <p>
+	If authentication is desired, <b>user</b> specifies the username, and <b>auth-type</b> must be
+	set to AUTH. The actual password will be retrieved via java.net.Authenticator, so your application
+	must have a valid Authenticator class registered via Authenticator.setDefault(), to prompt the
+	user for the password (the username is ignored, having been already provided in the URL).
+      </p>
+      <p>
+	The database and strategy, if provided, must be valid database or strategy codes, or the wildcards
+	"*" or "!" for database, or "." for strategy.
+      </p>
+      <p>
+	The last parameter is currently ignored (normally it restricts the returned result to the n<super>th</super>
+	result from the list.
+      </p>
+    </section>
+  </body>
+</document>
+
+
+
+

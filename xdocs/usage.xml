@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<document>
+
+  <properties>
+    <author email="ramon.casha@linux.org.mt">Ramon Casha</author>
+    <title>Usage</title>
+  </properties>
+
+  <body>
+    <section name="Usage">
+      <subsection name="Exception Handling">
+	<p>
+	  Most of the functions in this API throw two exception types. A java.io.IOException
+	  is thrown whenever there is an I/O error - usually a network communication problem.
+	  The <a href="apidocs/mt/rcasha/dict/client/DictException.html">DictException</a> class
+	  is thrown when an error specific to the JavaDict-Client API
+	  or DICT protocol occurs.  The functions described below will only mention specific
+	  exceptions if they are different from these two.
+	</p>
+	<p>
+	  The <a href="apidocs/mt/rcasha/dict/client/DictClient.html">DictClient</a> class offers
+	  two ways of dealing with error-messages originating with
+	  the dict server. By default, any such errors will generate a <a href="apidocs/mt/rcasha/dict/client/StatusException.html">StatusException</a>
+	  (descendant of DictException). Thus for
+	  instance, a failed authentication request or a no-definitions-found error will both
+	  generate exceptions. This is the recommended way of dealing with server errors.
+	  Alternatively, you can call the setThrowExceptions(false) function,
+	  in which case such errors will not throw exceptions, but will return the error-bearing
+	  response. In this case, if the getDefinitions function (below) finds no matches it will
+	  return an empty list, while the auth function will return the error-bearing Response.
+	</p>
+      </subsection>
+      <subsection name="Connecting to the server">
+      <p>
+	The main class to use in your application is <a href="apidocs/mt/rcasha/dict/client/DictClient.html">DictClient</a>. 
+	The constructors of this class connect to a server. You can optionally specify
+	the server name (default localhost) and port number (default 2628).
+	Once you have an instance, various functions are available to retrieve information
+	from the server, before finally calling the close() function.
+      </p>
+      <p>
+	Note that many DICT servers will disconnect a client after long periods of inactivity.
+	The normal operation is to connect, retrieve the data needed, and then disconnect, rather
+	than leaving an open connection for the duration of an application.
+      </p>
+      </subsection>
+      <subsection name="Retrieving the list of dictionaries">
+	<p>
+	  Each DICT server may have multiple dictionaries or databases. The getDatabases() function
+	  returns a java.util.Map, in which the key is the database code and the value is a short 
+	  description (both Strings). These can be used to allow the user to select a dictionary to query.
+	</p>
+	<p>
+	  Apart from these codes, all servers support the use of special "wildcard" codes, identified
+	  by the constants DATABASE_ALL and DATABASE_FIRST, which return matching definitions from all
+	  databases, and from the first matching database, respectively.
+	</p>
+      </subsection>
+      <subsection name="Retrieving definitions from the dictionary">
+	<p>
+	  The getDefinitions function corresponds to the DICT command "DEFINE".
+	  As parameters it takes a database (dictionary) code, and the word to search for.
+	  The database name can be the constants DATABASE_ALL or DATABASE_FIRST (see above).
+	</p>
+	<p>
+	  This function returns a java.util.List of <a href="apidocs/mt/rcasha/dict/client/DefinitionResponse.html">DefinitionResponse</a> objects.
+	  Each one contains the database code and name (useful if you supplied a wildcard as the
+	  source database), and the exact word retrieved (there may be case differences etc), and
+	  the actual definition in getTextualInformation().
+	</p>
+	<p>
+	  The definition is composed of freeform plain text (usually in multiple lines), but there's
+	  an unwritten convention that any words which can be looked up again in the same dictionary
+	  are enclosed by {braces}. Not all databases adhere to this convention.
+	</p>
+      </subsection>
+      <subsection name="Retrieving the list of strategies">
+	<p>
+	  Each DICT server may have multiple strategies to use in the MATCH command (see below).
+	  The getStrategies() function
+	  returns a java.util.Map, in which the key is the strategy code and the value is a short 
+	  description (both Strings). Examples might include regular expressions, globs, soundex or exact
+	  matching.
+	</p>
+	<p>
+	  The special strategies "prefix" and "exact" are supported by all servers, and can be specified
+	  using the STRATEGY_PREFIX and STRATEGY_EXACT constants. In addition, the constant STRATEGY_DEFAULT
+	  identifies a default strategy, which is server-dependant.
+	</p>
+      </subsection>
+      <subsection name="Retrieving matches from the dictionary">
+	<p>
+	  The getMatches function corresponds to the DICT command "MATCH".
+	  As parameters it takes a database (dictionary) code, a strategy code, and the word to search for.
+	  The database and strategy can be specified using one of the special constants described earlier.
+	</p>
+	<p>
+	  This function retrieves a collection of words which match the given one. The strategy code determines
+	  how they are matched (eg, regular expressions, prefix or exact match).
+	</p>
+	<p>
+	  This function returns a java.util.Map, in which the key is a database-code and the value is a
+	  java.util.List containing all the matching words from that database as Strings. The database
+	  code and word can thus be used in the getDefinitions function to return the definition of that
+	  word.
+	</p>
+      </subsection>
+      <subsection name="Authentication">
+	<p>
+	  Some dict servers require the client to authenticate itself before it can query the databases,
+	  or it might restrict some databases to those clients which have been authenticated.
+	  However not all servers are configured to authenticate clients, so the authentication should
+	  always be made optional.
+	</p>
+	<p>
+	  The function to authenticate is auth, and it takes a username and a password (also known as a
+	  "shared secret") as parameters. The DICT command used for authentication is AUTH, which transmits
+	  an MD5 hash as the authentication token.
+	</p>
+	<p>
+	  At the moment, the SASLAUTH method of authentication is not supported.
+	</p>
+      </subsection>
+      <subsection name="Other functions">
+	<p>
+	  The functions getStatus, getServerInfo, getHelp and getDatabaseInfo all return a multi-line
+	  string containing textual information from the server. This may include copyright and source
+	  information, and is intended for display to a user rather than parsing by a program.
+	</p>
+      </subsection>
+    </section>
+  </body>
+</document>
+
+

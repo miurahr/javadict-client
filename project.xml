@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<project>
+
+  <pomVersion>3</pomVersion>
+  <groupId>javadict</groupId>
+  <id>javadict-client</id>
+  <name>JavaDict-Client</name>
+
+  <currentVersion>0.9</currentVersion>
+
+  <organization>
+    <name>Ramon Casha</name>
+  </organization>
+
+  <inceptionYear>2003</inceptionYear>
+
+  <package>mt.rcasha.dict.client</package>
+  <logo>/images/javadict-client-logo.png</logo>
+
+  <shortDescription>Dict client for Java</shortDescription>
+
+  <description>
+    JavaDict-Client is a dict protocol (RFC2229) client for Java.
+    It supports all options except (at the time of writing) "OPTION MIME" and "SASLAUTH".
+  </description>
+
+  <licenses>
+    <name>GPL</name>
+    <url>http://www.gnu.org/copyleft/gpl.html</url>
+    <distribution>repo</distribution>
+  </licenses>
+
+  <developers>
+
+    <developer>
+      <name>Ramon Casha</name>
+      <id>rac</id>
+      <email>ramon.casha@linux.org.mt</email>
+      <roles>
+	<role>Project Initiator</role>
+	<role>Java Developer</role>
+      </roles>
+      <organization>Malta Linux User Group</organization>
+      <timezone>+1</timezone>
+    </developer>
+
+  </developers>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.0.3</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+
+    <!--
+    <nagEmailAddress>
+      dev@maven.apache.org
+    </nagEmailAddress>
+    -->
+
+    <sourceDirectory>src/java</sourceDirectory>
+
+    <resources>
+      <resource>
+	<directory>${basedir}/src/java</directory>
+	<includes>
+	  <include>**/*.properties</include>
+	  <include>**/*.xml</include>
+	  <include>**/*.xsl</include>
+	  <include>**/*.css</include>
+	</includes>
+      </resource>
+    </resources>
+
+  </build>
+
+</project>
