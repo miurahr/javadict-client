@@ -1,7 +1,7 @@
 /* ==================================================================
  * This file is part of JavaDictClient - a Java client for the Dict 
  * protocol (RFC2229)
- * Copyright © 2003 Ramon Casha
+ * Copyright © 2003-2007 Ramon Casha
  *
  * Licensed under the GNU LGPL v2.1. You can find the text of this
  * license at http://www.gnu.org/copyleft/lesser.html
@@ -20,7 +20,7 @@ import java.util.StringTokenizer;
 public class ConnectResponse extends SingleResponse {
     
     /** List of capability strings */    
-    private ArrayList capabilities = new ArrayList();
+    private ArrayList<String> capabilities = new ArrayList<String>();
     /** Server-generated msgid */    
     private String msgId;
     
@@ -62,14 +62,14 @@ public class ConnectResponse extends SingleResponse {
     /** List of capability strings
      * @return Value of property capabilities.
      */
-    public ArrayList getCapabilities() {
+    public ArrayList<String> getCapabilities() {
         return capabilities;
     }
     
     /** Get the server's initial msgid. Used for authentication.
      * @return Value of property msgId.
      */
-    public java.lang.String getMsgId() {
+    public String getMsgId() {
         return msgId;
     }
     

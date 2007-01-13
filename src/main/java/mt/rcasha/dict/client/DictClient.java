@@ -1,7 +1,7 @@
 /* ==================================================================
  * This file is part of JavaDictClient - a Java client for the Dict 
  * protocol (RFC2229)
- * Copyright © 2003 Ramon Casha
+ * Copyright © 2003-2007 Ramon Casha
  *
  * Licensed under the GNU LGPL v2.1. You can find the text of this
  * license at http://www.gnu.org/copyleft/lesser.html
@@ -186,7 +186,7 @@ public class DictClient {
      */
     private void check() throws DictError {
         if (socket == null) {
-            throw new DictError(ResourceBundle.getBundle("org/dict/client/DictMessages").getString("ConnectionClosed"));
+            throw new DictError(ResourceBundle.getBundle("mt/rcasha/dict/client/DictMessages").getString("ConnectionClosed"));
         }
     }
     
@@ -196,7 +196,7 @@ public class DictClient {
      * @throws DictException Thrown when a dict exception occurs
      */
     public void close() throws DictException, IOException {
-        check();
+        if(socket==null) return;
         Response res = send("QUIT");
         socket.close();
         socket = null;
@@ -208,13 +208,12 @@ public class DictClient {
      * @throws DictException Thrown when a dict exception occurs
      * @return a map of database codes and descriptions
      */
-    public Map getDatabases() throws DictException, IOException {
+    public Map<String,String> getDatabases() throws DictException, IOException {
         Response res = send("SHOW DATABASES");
-        HashMap map = new HashMap();
+        HashMap<String,String> map = new HashMap<String,String>();
         SingleResponse sr = res.getResponse(Status.INFO_DATABASES_FOUND);
-        Iterator it = sr.getLines().iterator();
-        while (it.hasNext()) {
-            ResponseStringIterator rit = new ResponseStringIterator((String) it.next());
+        for ( String line : sr.getLines() ) {
+            ResponseStringIterator rit = new ResponseStringIterator(line);
             map.put(rit.nextString(), rit.nextString());
         }
         return map;
@@ -262,13 +261,12 @@ public class DictClient {
      * @throws DictException Thrown when a dict exception occurs
      * @return a map of strategy codes and descriptions
      */
-    public Map getStrategies() throws DictException, IOException {
+    public Map<String,String> getStrategies() throws DictException, IOException {
         Response res = send("SHOW STRATEGIES");
-        HashMap map = new HashMap();
+        HashMap<String,String> map = new HashMap<String,String>();
         SingleResponse sr = res.getResponse(Status.INFO_STRATEGIES_FOUND);
-        Iterator it = sr.getLines().iterator();
-        while (it.hasNext()) {
-            ResponseStringIterator rit = new ResponseStringIterator((String) it.next());
+        for ( String s : sr.getLines() ) {
+            ResponseStringIterator rit = new ResponseStringIterator(s);
             map.put(rit.nextString(), rit.nextString());
         }
         return map;
@@ -328,9 +326,10 @@ public class DictClient {
      * @throws IOException Thrown if a network error occurs
      * @throws DictException Thrown when a dict exception occurs
      */
-    public List getDefinitions(String database, String word) throws IOException, DictException {
+    @SuppressWarnings("unchecked")
+    public List<DefinitionResponse> getDefinitions(String database, String word) throws IOException, DictException {
         Response res = send("DEFINE \"" + database + "\" \"" + word + "\"");
-        return res.getResponses(Status.INFO_DEFINITION);
+        return (List<DefinitionResponse>)res.getResponses(Status.INFO_DEFINITION);
     }
     
     /** Finds the matches for the specified word using the specified strategy and
@@ -351,7 +350,7 @@ public class DictClient {
      * @throws IOException Thrown if a network error occurs
      * @throws DictException Thrown when a dict exception occurs
      */
-    public Map getMatches(String database, String strategy, String word) throws IOException, DictException {
+    public Map<String,List<String>> getMatches(String database, String strategy, String word) throws IOException, DictException {
         Response res = send("MATCH \"" + database + "\" \"" + strategy + "\" \"" + word + "\"");
         MatchResponse sr = (MatchResponse) res.getResponse(Status.INFO_MATCH);
         return sr.getDbResults();

@@ -1,7 +1,7 @@
 /* ==================================================================
  * This file is part of JavaDictClient - a Java client for the Dict 
  * protocol (RFC2229)
- * Copyright © 2003 Ramon Casha
+ * Copyright © 2003-2007 Ramon Casha
  *
  * Licensed under the GNU LGPL v2.1. You can find the text of this
  * license at http://www.gnu.org/copyleft/lesser.html
@@ -17,10 +17,10 @@ import java.util.Iterator;
  *
  * @author Ramon Casha (ramon.casha@linux.org.mt)
  */
-public class ResponseStringIterator implements Iterator {
+public class ResponseStringIterator implements Iterator<String> {
 
     /** Actual iterator */
-    private Iterator it;
+    private Iterator<String> it;
 
     /** @return whether there are more tokens */
     public boolean hasNext() {
@@ -28,13 +28,13 @@ public class ResponseStringIterator implements Iterator {
     }
     
     /** @return the next token */
-    public Object next() {
+    public String next() {
         return it.next();
     }
     
     /** @return the next token */
     public String nextString() {
-        return (String) it.next();
+        return it.next();
     }
     
     /** @return the next token converted to an int */
@@ -51,7 +51,7 @@ public class ResponseStringIterator implements Iterator {
      *@param line String to parse
      */
     public ResponseStringIterator(String line) {
-        ArrayList al = new ArrayList();
+        ArrayList<String> al = new ArrayList<String>();
         boolean inQuotes = false;
         StringBuffer cword = new StringBuffer();
         for (int i = 0; i < line.length(); i++) {

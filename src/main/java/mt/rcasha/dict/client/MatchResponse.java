@@ -1,7 +1,7 @@
 /* ==================================================================
  * This file is part of JavaDictClient - a Java client for the Dict 
  * protocol (RFC2229)
- * Copyright © 2003 Ramon Casha
+ * Copyright © 2003-2007 Ramon Casha
  *
  * Licensed under the GNU LGPL v2.1. You can find the text of this
  * license at http://www.gnu.org/copyleft/lesser.html
@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * A 152 response from the server. Extends SingleResponse, adding the parsing of 
@@ -23,7 +24,7 @@ import java.util.Iterator;
 public class MatchResponse extends SingleResponse {
     
     /** Map of Lists. */
-    private HashMap dbResults = new HashMap();
+    private HashMap<String,List<String>> dbResults = new HashMap<String,List<String>>();
     
     /** Creates a new instance of MatchResponse 
      * @param client Instance of DictClient
@@ -33,15 +34,13 @@ public class MatchResponse extends SingleResponse {
      */
     public MatchResponse(DictClient client, String line) throws DictException, IOException {
         super(client, line);
-        Iterator lit = getLines().iterator();
-        while (lit.hasNext()) {
-            String l = (String) lit.next();
+        for ( String l : getLines() ) {
             ResponseStringIterator rsi = new ResponseStringIterator(l);
             String db = rsi.nextString();
             String matchword = rsi.nextString();
-            ArrayList list = (ArrayList) dbResults.get(db);
+            List<String> list = dbResults.get(db);
             if (list == null) {
-                list = new ArrayList();
+                list = new ArrayList<String>();
                 dbResults.put(db, list);
             }
             list.add(matchword);
@@ -51,7 +50,7 @@ public class MatchResponse extends SingleResponse {
     /** Get the resulting Map of Lists.
      * @return Value of property dbResults.
      */
-    public HashMap getDbResults() {
+    public HashMap<String,List<String>> getDbResults() {
         return dbResults;
     }
     

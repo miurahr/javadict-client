@@ -1,7 +1,7 @@
 /* ==================================================================
  * This file is part of JavaDictClient - a Java client for the Dict
  * protocol (RFC2229)
- * Copyright © 2003 Ramon Casha
+ * Copyright © 2003-2007 Ramon Casha
  *
  * Licensed under the GNU LGPL v2.1. You can find the text of this
  * license at http://www.gnu.org/copyleft/lesser.html

@@ -1,7 +1,7 @@
 /* ==================================================================
  * This file is part of JavaDictClient - a Java client for the Dict
  * protocol (RFC2229)
- * Copyright © 2003 Ramon Casha
+ * Copyright © 2003-2007 Ramon Casha
  *
  * Licensed under the GNU LGPL v2.1. You can find the text of this
  * license at http://www.gnu.org/copyleft/lesser.html
@@ -110,10 +110,8 @@ public class DictURLConnection extends java.net.URLConnection {
                     
                 }
                 if(method.equals("d")) {
-                    Iterator it = client.getDefinitions(database, word).iterator();
                     StringBuffer tmp = new StringBuffer();
-                    while(it.hasNext()) {
-                        DefinitionResponse dr = (DefinitionResponse)it.next();
+                    for ( DefinitionResponse dr : client.getDefinitions(database, word)) {
                         tmp.append("From "+dr.getDbDescription()+" ["+dr.getDatabase()+"]:\n\n");
                         tmp.append(dr.getTextualInformation());
                         tmp.append("\n\n");
@@ -121,12 +119,10 @@ public class DictURLConnection extends java.net.URLConnection {
                     body = tmp.toString().getBytes("UTF-8");
                 }
                 if(method.equals("m")) {
-                    Iterator it = client.getMatches(database, strategy, word).entrySet().iterator();
                     StringBuffer tmp = new StringBuffer();
-                    while(it.hasNext()) {
-                        Map.Entry entry = (Map.Entry)it.next();
+                    for ( Map.Entry<String,List<String>> entry : client.getMatches(database, strategy, word).entrySet()) {
                         tmp.append("From "+entry.getKey()+":\n");
-                        Iterator wit = ((List)entry.getValue()).iterator();
+                        Iterator<String> wit = entry.getValue().iterator();
                         while(wit.hasNext()) {
                             tmp.append(wit.next());
                             if(wit.hasNext()) {

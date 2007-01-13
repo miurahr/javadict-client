@@ -1,7 +1,7 @@
 /* ==================================================================
  * This file is part of JavaDictClient - a Java client for the Dict 
  * protocol (RFC2229)
- * Copyright © 2003 Ramon Casha
+ * Copyright © 2003-2007 Ramon Casha
  *
  * Licensed under the GNU LGPL v2.1. You can find the text of this
  * license at http://www.gnu.org/copyleft/lesser.html
@@ -11,7 +11,7 @@ package mt.rcasha.dict.client;
 import java.io.IOException;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,11 +36,11 @@ public class SingleResponse {
     /** Reference to calling client instance */
     private DictClient client;
     /** The first line, converted to tokens */
-    private ArrayList parameters = new ArrayList();
+    private ArrayList<String> parameters = new ArrayList<String>();
     /** The first line, following the status code */
     private String firstLine;
     /** Lines following the first one */
-    private ArrayList lines = new ArrayList();
+    private ArrayList<String> lines = new ArrayList<String>();
     
     /** Create an instance of SingleResponse (or a derived class) based on the data
      * waiting in the socket
@@ -120,12 +120,11 @@ public class SingleResponse {
      */
     public String getTextualInformation() {
         StringBuffer sb = new StringBuffer();
-        Iterator it = lines.iterator();
-        while (it.hasNext()) {
-            sb.append(it.next());
-            if (it.hasNext()) {
-                sb.append("\n");
-            }
+        String sep = "";
+        for ( String line : lines ) {
+            sb.append(sep);
+            sb.append(line);
+            sep = "\n";
         }
         return sb.toString();
     }
@@ -138,10 +137,9 @@ public class SingleResponse {
         sb.append(statusChars);
         sb.append(" ");
         sb.append(firstLine);
-        Iterator it = lines.iterator();
-        while (it.hasNext()) {
+        for ( String line : lines ) {
             sb.append("\n");
-            sb.append(it.next());
+            sb.append(line);
         }
         return sb.toString();
     }
@@ -164,7 +162,7 @@ public class SingleResponse {
     }
     
     /** @return a List of the tokens in the first line */
-    public ArrayList getParameters() {
+    public List<String> getParameters() {
         return parameters;
     }
     
@@ -172,16 +170,16 @@ public class SingleResponse {
      * @param index the parameter number
      */
     public String getParameter(int index) {
-        return (String) parameters.get(index);
+        return parameters.get(index);
     }
     
     /** @return the part of the first line following the status code. */
-    public java.lang.String getFirstLine() {
+    public String getFirstLine() {
         return firstLine;
     }
     
     /** @return the list of lines following the first, if any. */
-    public ArrayList getLines() {
+    public List<String> getLines() {
         return lines;
     }
     

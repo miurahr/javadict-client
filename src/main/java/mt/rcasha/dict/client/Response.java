@@ -1,7 +1,7 @@
 /* ==================================================================
  * This file is part of JavaDictClient - a Java client for the Dict 
  * protocol (RFC2229)
- * Copyright © 2003 Ramon Casha
+ * Copyright © 2003-2007 Ramon Casha
  *
  * Licensed under the GNU LGPL v2.1. You can find the text of this
  * license at http://www.gnu.org/copyleft/lesser.html
@@ -29,7 +29,7 @@ public class Response {
     private static final Log log = LogFactory.getLog(Response.class);
 
     /** List of all responses returned */
-    private ArrayList responses = new ArrayList();
+    private ArrayList<SingleResponse> responses = new ArrayList<SingleResponse>();
     
     /** Creates a new instance of Response. Reads all {@link SingleResponse}s for the last command. 
      * @param client Instance of DictClient
@@ -44,9 +44,7 @@ public class Response {
             responses.add(resp);
         }
         if (client.getThrowExceptions()) {
-            Iterator it = responses.iterator();
-            while (it.hasNext()) {
-                SingleResponse sr = (SingleResponse) it.next();
+            for ( SingleResponse sr : responses ) {
                 if (sr.isError()) {
                     throw new StatusException(sr.getStatus(), sr.getFirstLine());
                 }
@@ -55,7 +53,7 @@ public class Response {
     }
     
     /** @return a list of all responses */
-    public ArrayList getResponses() {
+    public ArrayList<SingleResponse> getResponses() {
         return responses;
     }
     
@@ -63,11 +61,9 @@ public class Response {
      * empty.
      * @param statusCode the status code to filter by.
      */
-    public ArrayList getResponses(int statusCode) {
-        ArrayList nuList = new ArrayList();
-        Iterator it = responses.iterator();
-        while (it.hasNext()) {
-            SingleResponse resp = (SingleResponse) it.next();
+    public ArrayList<? extends SingleResponse> getResponses(int statusCode) {
+        ArrayList<SingleResponse> nuList = new ArrayList<SingleResponse>();
+        for ( SingleResponse resp : responses ) {
             if (resp.getStatus() == statusCode) {
                 nuList.add(resp);
             }
@@ -84,14 +80,14 @@ public class Response {
      * @return A SingleResponse object having the specified status code.
      */
     public SingleResponse getResponse(int statusCode) throws NoSuchResponseException, TooManyResponsesException, DictException {
-        List l = getResponses(statusCode);
+        List<? extends SingleResponse> l = getResponses(statusCode);
         if (l.size() == 0) {
             throw new NoSuchResponseException();
         }
         if (l.size() > 1) {
             throw new TooManyResponsesException();
         }
-        return (SingleResponse) l.get(0);
+        return l.get(0);
     }
 
     /** Return a string representation. Mainly for debugging. 
@@ -99,7 +95,7 @@ public class Response {
      */
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        Iterator it = responses.iterator();
+        Iterator<SingleResponse> it = responses.iterator();
         while (it.hasNext()) {
             sb.append(it.next());
             if (it.hasNext()) {
