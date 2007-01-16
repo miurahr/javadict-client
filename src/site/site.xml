@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Maven">
+<project name="JavaDict">
 
-  <title>JavaDict-Client</title>
-
+  <bannerLeft>
+    <name>JavaDict</name>
+    <src>/images/javadict-client-logo.png</src>
+    <href>http://linux.org.mt/projects/javadict/</href>
+  </bannerLeft>
+  
   <body>
-
     <links>
-      <item name="MLUG Home"		href="http://linux.org.mt/"/>
+      <item name="MLUG" href="http://linux.org.mt/" />
     </links>
-
+    
    <menu name="Overview">
       <item name="Introduction"		href="index.html"/>
       <item name="Usage"		href="usage.html"/>
@@ -20,7 +23,9 @@
      <item name="RFC2229"		href="ftp://ftp.isi.edu/in-notes/rfc2229.txt"/>
      <item name="www.dict.org"		href="http://www.dict.org/"/>
     </menu>
+
+    ${reports}
+    
   </body>
 </project>
-
 

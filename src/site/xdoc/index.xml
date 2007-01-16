@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <document>
 
   <properties>
@@ -22,12 +22,11 @@
       </p>
       <subsection name="Sample">
 	<source><![CDATA[DictClient client = new DictClient();
-Iterator it = client.getDefinitions(DictClient.DATABASE_ALL, "hello").iterator();
-System.out.println("Definitions of word 'Hello':");
-while(it.hasNext()) {
-  DefinitionResponse dr = (DefinitionResponse)it.next();
+List<DefinitionResponse> resp = client.getDefinitions(DictClient.DATABASE_ALL, "hello");
+
+for ( DefinitionResponse dr : resp ) {
   System.out.println(dr.getTextualInformation());
-}]]></source>
+} ]]></source>
     </subsection>
       <subsection name="RFC2229 Features Implemented">
 	<p>
