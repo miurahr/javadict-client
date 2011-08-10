@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="JavaDict" default="default" basedir=".">
+
+	<!--
+	NOTE: the "zip" target assumes that ${project.name} is equal to the 
+	      directory name of this project. 
+	-->
+
+	<property name="build.dir" value="bin" />
+	<property name="app.jar" value="javadict.jar" />
+	<property name="fat.jar" value="javadictfat.jar" />
+	<property name="src.dir" value="src/main/java" />
+	<property name="lib.dir" value="lib" />
+	<property name="app.zip" value="javadict.zip" />
+	<property name="main.class" value="mt.rcasha.dict.client.sample.Sample" />
+	<property name="logging.jar" value="commons-logging-1.1.1.jar" />
+	<property name="junit.jar" value="junit-4.8.2.jar" />
+	<property name="test_src.dir" value="src/test/java" />
+	<path id="classpath.path">
+		<pathelement location="${build.dir}" />
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+    <presetdef name="my.javac">
+        <javac includeantruntime="false" />
+    </presetdef>
+
+	<target name="default" depends="jar" />
+
+	<target name="jar" depends="compile" description="make jar of only our classes">
+		<jar jarfile="${app.jar}" basedir="${build.dir}" includes="**/*.class" excludes="**/*Test.class" />
+	</target>
+
+	<target name="fatjar" depends="jar" description="make jar of classes and includes 3rd party jars">
+		<property name="tmp" location="tmp"/>
+		<delete dir="${tmp}"/>
+		<mkdir dir="${tmp}"/>
+		<unjar dest="${tmp}">
+			<fileset dir="${lib.dir}">
+				<exclude name="**/${junit.jar}"/>
+			</fileset>
+		</unjar>
+		<unjar src="${app.jar}" dest="${tmp}"/>
+		<jar jarfile="${fat.jar}" basedir="${tmp}" >
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}"/>
+			</manifest>
+		</jar>
+		<delete dir="${tmp}"/>
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${build.dir}"/>
+		<my.javac srcdir="${src.dir}" destdir="${build.dir}" deprecation="on" debug="on">
+			<classpath>
+				<path refid="classpath.path" />
+			</classpath>
+		</my.javac>
+	</target>
+
+	<target name="zip" description="creates a zip file of sources and lib needed to compile">
+		<zip destfile="${app.zip}" basedir=".."
+			includes="${ant.project.name}/**"
+			excludes="**/${app.jar}, **/fat.jar, **/.git/**, **/*.class, **/${app.zip}, **/bin/**, **/.settings/**, **/${junit.jar}">
+		</zip>
+	</target>
+
+	<target name="test" depends="compile" description="test">
+		<junit printsummary="yes" fork="yes" haltonfailure="no" haltonerror="no">
+
+			<formatter type="plain" usefile="false" />
+			<classpath>
+
+				<!-- classes to test -->
+				<pathelement location="${build.dir}" />
+
+				<!-- 3rd party libs -->
+				<pathelement location="${lib.dir}/${logging.jar}" />
+				<pathelement location="${lib.dir}/${junit.jar}" />
+			</classpath>
+			<batchtest>
+				<formatter type="plain" usefile="false" />
+				<fileset dir="${test_src.dir}">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+
+		</junit>
+	</target>
+
+	<target name="clean" description="clean">
+		<delete dir="${build.dir}" />
+		<delete file="${app.jar}" />
+		<delete file="${fat.jar}" />
+	</target>
+
+</project>
