@@ -9,12 +9,8 @@
 package mt.rcasha.dict.client;
 
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Represents a single response from the dict server, which consists of a
@@ -25,23 +21,20 @@ import org.apache.commons.logging.LogFactory;
  * @author Ramon Casha (ramon.casha@linux.org.mt)
  */
 public class SingleResponse {
-    
-    /** Log class */
-    private static final Log log = LogFactory.getLog(SingleResponse.class);
-    
+
     /** Actual characters of the status code */
-    private char[] statusChars = new char[3];
+    private final char[] statusChars = new char[3];
     /** Status code */
-    private int status;
+    private final int status;
     /** Reference to calling client instance */
-    private DictClient client;
+    private final DictClient client;
     /** The first line, converted to tokens */
-    private ArrayList<String> parameters = new ArrayList<String>();
+    private final ArrayList<String> parameters = new ArrayList<String>();
     /** The first line, following the status code */
-    private String firstLine;
+    private final String firstLine;
     /** Lines following the first one */
-    private ArrayList<String> lines = new ArrayList<String>();
-    
+    private final ArrayList<String> lines = new ArrayList<String>();
+
     /** Create an instance of SingleResponse (or a derived class) based on the data
      * waiting in the socket
      * @param client Instance of DictClient
@@ -54,7 +47,7 @@ public class SingleResponse {
         String line = client.readLine();
         int status = Integer.parseInt(line.substring(0, 3));
         SingleResponse resp;
-        switch(status) {
+        switch (status) {
             case Status.SUCCESS_HELLO:
                 resp = new ConnectResponse(client, line);
                 break;
@@ -70,7 +63,7 @@ public class SingleResponse {
         }
         return resp;
     }
-    
+
     /** Creates a new instance of DictResponse
      * @param client Instance of DictClient
      * @param line First line from server
@@ -94,7 +87,7 @@ public class SingleResponse {
             readMoreLines();
         }
     }
-    
+
     /**
      * Reads multiple lines until we meet a single '.' on a line by itself.
      * @throws IOException Thrown if a network error occurs
@@ -104,15 +97,14 @@ public class SingleResponse {
             String line = client.readLine();
             if (line.startsWith("..")) {
                 lines.add(line.substring(1));
-            }
-            else if (line.equals(".")) {
+            } else if (line.equals(".")) {
                 break;
             } else {
                 lines.add(line);
             }
         }
     }
-    
+
     /**
      * Get the textual information (the lines following the first) as a single
      * string with newline characters between the lines returned.
@@ -121,29 +113,30 @@ public class SingleResponse {
     public String getTextualInformation() {
         StringBuffer sb = new StringBuffer();
         String sep = "";
-        for ( String line : lines ) {
+        for (String line : lines) {
             sb.append(sep);
             sb.append(line);
             sep = "\n";
         }
         return sb.toString();
     }
-    
+
     /** Convert to a string (mainly for debugging purposes)  
      * @return a string representation 
      */
+    @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
         sb.append(statusChars);
         sb.append(" ");
         sb.append(firstLine);
-        for ( String line : lines ) {
+        for (String line : lines) {
             sb.append("\n");
             sb.append(line);
         }
         return sb.toString();
     }
-    
+
     /** Get the status as an array of exactly 3 characters (each char is '0'-'9')
      * @see Status
      * @return the status characters
@@ -151,8 +144,7 @@ public class SingleResponse {
     public char[] getStatusChars() {
         return statusChars;
     }
-    
-    
+
     /** Returns the status as an int
      * @see Status
      * @return the status number
@@ -160,43 +152,43 @@ public class SingleResponse {
     public int getStatus() {
         return status;
     }
-    
+
     /** @return a List of the tokens in the first line */
     public List<String> getParameters() {
         return parameters;
     }
-    
+
     /** @return the specified parameter value 
      * @param index the parameter number
      */
     public String getParameter(int index) {
         return parameters.get(index);
     }
-    
+
     /** @return the part of the first line following the status code. */
     public String getFirstLine() {
         return firstLine;
     }
-    
+
     /** @return the list of lines following the first, if any. */
     public List<String> getLines() {
         return lines;
     }
-    
+
     /** @return Does the status indicate an error condition?
      * @see Status#isError(int)
      */
     public boolean isError() {
         return Status.isError(status);
     }
-    
+
     /** @return Does the status indicate that other {@link SingleResponse}s follow this one?
      * @see Status#isFollowed(int)
      */
     public boolean isFollowed() {
         return Status.isFollowed(status);
     }
-    
+
     /** @return Does the status indicate that more lines follow the first?
      * @see Status#isMultiLine(int)
      */

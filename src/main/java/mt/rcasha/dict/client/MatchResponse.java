@@ -11,7 +11,6 @@ package mt.rcasha.dict.client;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -22,10 +21,10 @@ import java.util.List;
  * @author Ramon Casha (ramon.casha@linux.org.mt)
  */
 public class MatchResponse extends SingleResponse {
-    
+
     /** Map of Lists. */
-    private HashMap<String,List<String>> dbResults = new HashMap<String,List<String>>();
-    
+    private final HashMap<String, List<String>> dbResults = new HashMap<String, List<String>>();
+
     /** Creates a new instance of MatchResponse 
      * @param client Instance of DictClient
      * @param line First line from server
@@ -34,7 +33,7 @@ public class MatchResponse extends SingleResponse {
      */
     public MatchResponse(DictClient client, String line) throws DictException, IOException {
         super(client, line);
-        for ( String l : getLines() ) {
+        for (String l : getLines()) {
             ResponseStringIterator rsi = new ResponseStringIterator(l);
             String db = rsi.nextString();
             String matchword = rsi.nextString();
@@ -46,12 +45,12 @@ public class MatchResponse extends SingleResponse {
             list.add(matchword);
         }
     }
-    
+
     /** Get the resulting Map of Lists.
      * @return Value of property dbResults.
      */
-    public HashMap<String,List<String>> getDbResults() {
+    public HashMap<String, List<String>> getDbResults() {
         return dbResults;
     }
-    
+
 }

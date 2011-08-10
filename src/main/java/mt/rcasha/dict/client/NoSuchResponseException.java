@@ -14,11 +14,13 @@ package mt.rcasha.dict.client;
  *
  * @author Ramon Casha (ramon.casha@linux.org.mt)
  */
+@SuppressWarnings("serial")
 public class NoSuchResponseException extends DictException {
-    
+
     /** Creates a new instance of NoSuchResponseException */
     public NoSuchResponseException() {
-        super(java.util.ResourceBundle.getBundle("org/dict/client/DictMessages").getString("NoSuchResponse"));
+        super(java.util.ResourceBundle.getBundle("org/dict/client/DictMessages").getString(
+                "NoSuchResponse"));
     }
-    
+
 }

@@ -12,14 +12,15 @@ package mt.rcasha.dict.client;
  * General-purpose "Dict" exception class.
  * @author Ramon Casha (ramon.casha@linux.org.mt)
  */
+@SuppressWarnings("serial")
 public class DictException extends java.lang.Exception {
-    
+
     /**
      * Creates a new instance of <code>DictException</code> without detail message.
      */
     public DictException() {
     }
-    
+
     /**
      * Constructs an instance of <code>DictException</code> with the specified detail message.
      * @param msg the detail message.
@@ -27,7 +28,7 @@ public class DictException extends java.lang.Exception {
     public DictException(String msg) {
         super(msg);
     }
-    
+
     /**
      * Creates a new instance of <code>DictException</code> without detail message.
      * @param cause the throwable that caused this exception
@@ -35,7 +36,7 @@ public class DictException extends java.lang.Exception {
     public DictException(Throwable cause) {
         super(cause);
     }
-    
+
     /**
      * Constructs an instance of <code>DictException</code> with the specified detail message.
      * @param cause the throwable that caused this exception

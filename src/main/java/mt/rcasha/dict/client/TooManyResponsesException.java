@@ -14,11 +14,13 @@ package mt.rcasha.dict.client;
  *
  * @author Ramon Casha (ramon.casha@linux.org.mt)
  */
+@SuppressWarnings("serial")
 public class TooManyResponsesException extends DictException {
-    
+
     /** Creates a new instance of TooManyResponsesException */
     public TooManyResponsesException() {
-        super(java.util.ResourceBundle.getBundle("org/dict/client/DictMessages").getString("TooManyResponses"));
+        super(java.util.ResourceBundle.getBundle("org/dict/client/DictMessages").getString(
+                "TooManyResponses"));
     }
-    
+
 }

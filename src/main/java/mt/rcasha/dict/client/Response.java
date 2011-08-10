@@ -9,13 +9,9 @@
 package mt.rcasha.dict.client;
 
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Represents a complete response from the dict server, which may consist of
@@ -24,13 +20,10 @@ import org.apache.commons.logging.LogFactory;
  * @author Ramon Casha (ramon.casha@linux.org.mt)
  */
 public class Response {
-    
-    /** Log class. */
-    private static final Log log = LogFactory.getLog(Response.class);
 
     /** List of all responses returned */
-    private ArrayList<SingleResponse> responses = new ArrayList<SingleResponse>();
-    
+    private final ArrayList<SingleResponse> responses = new ArrayList<SingleResponse>();
+
     /** Creates a new instance of Response. Reads all {@link SingleResponse}s for the last command. 
      * @param client Instance of DictClient
      * @throws IOException Thrown if a network error occurs
@@ -44,33 +37,33 @@ public class Response {
             responses.add(resp);
         }
         if (client.getThrowExceptions()) {
-            for ( SingleResponse sr : responses ) {
+            for (SingleResponse sr : responses) {
                 if (sr.isError()) {
                     throw new StatusException(sr.getStatus(), sr.getFirstLine());
                 }
             }
         }
     }
-    
+
     /** @return a list of all responses */
     public ArrayList<SingleResponse> getResponses() {
         return responses;
     }
-    
+
     /** @return a list of all SingleResponses matching the desired status code. List may be
      * empty.
      * @param statusCode the status code to filter by.
      */
     public ArrayList<? extends SingleResponse> getResponses(int statusCode) {
         ArrayList<SingleResponse> nuList = new ArrayList<SingleResponse>();
-        for ( SingleResponse resp : responses ) {
+        for (SingleResponse resp : responses) {
             if (resp.getStatus() == statusCode) {
                 nuList.add(resp);
             }
         }
         return nuList;
     }
-    
+
     /** Return a single response matching the desired status code. Fails if there are less
      * or more than exactly one such SingleResponse.
      * @param statusCode Status code to match
@@ -79,7 +72,8 @@ public class Response {
      * @throws DictException Sundry other exceptions
      * @return A SingleResponse object having the specified status code.
      */
-    public SingleResponse getResponse(int statusCode) throws NoSuchResponseException, TooManyResponsesException, DictException {
+    public SingleResponse getResponse(int statusCode) throws NoSuchResponseException,
+            TooManyResponsesException, DictException {
         List<? extends SingleResponse> l = getResponses(statusCode);
         if (l.size() == 0) {
             throw new NoSuchResponseException();
@@ -93,6 +87,7 @@ public class Response {
     /** Return a string representation. Mainly for debugging. 
      * @return a string representation.
      */
+    @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
         Iterator<SingleResponse> it = responses.iterator();
