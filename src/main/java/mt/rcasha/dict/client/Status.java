@@ -111,6 +111,7 @@ public final class Status {
             case INFO_SERVER:
             case INFO_DEFINITION:
             case INFO_MATCH:
+            case INFO_HELP:
                 return true;
             default:
                 return false;
