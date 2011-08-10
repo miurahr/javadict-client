@@ -9,26 +9,30 @@
 package mt.rcasha.dict.client.sample;
 
 import java.util.List;
+
 import javax.swing.AbstractListModel;
 
 /**
  * ListModel for java.util.Lists.
  * @author Ramon Casha (ramon.casha@linux.org.mt)
  */
-public class ListListModel extends AbstractListModel {
+@SuppressWarnings("serial")
+public class ListListModel<E> extends AbstractListModel<E> {
 
-    private List list;
-    
-    public ListListModel(List list) {
-        this.list = list;
+    private final List<E> list;
+
+    public ListListModel(final List<E> theList) {
+        list = theList;
     }
-    
-    public Object getElementAt(int index) {
+
+    @Override
+    public E getElementAt(int index) {
         return list.get(index);
-    }    
-    
+    }
+
+    @Override
     public int getSize() {
         return list.size();
     }
-    
+
 }

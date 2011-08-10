@@ -8,32 +8,45 @@
  * ================================================================== */
 package mt.rcasha.dict.client.sample;
 
-import mt.rcasha.dict.client.*;
-import java.util.*;
-import java.io.*;
-import javax.swing.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
+import javax.swing.JRadioButtonMenuItem;
+
+import mt.rcasha.dict.client.DefinitionResponse;
+import mt.rcasha.dict.client.DictClient;
+import mt.rcasha.dict.client.DictException;
 
 /**
  * Sample dict client application
  * @author Ramon Casha (ramon.casha@linux.org.mt)
  */
+@SuppressWarnings("serial")
 public class Sample extends javax.swing.JFrame {
-    
+
     String hostName = "localhost";
-    int     port = DictClient.DEFAULT_PORT;
+    int port = DictClient.DEFAULT_PORT;
     String database = "";
     String strategy = ".";
     private String userName = null;
     private String password = null;
-    List currentValues = new ArrayList();
-    List currentCodes = new ArrayList();
-    
+    List<String> currentValues = new ArrayList<String>();
+    List<String> currentCodes = new ArrayList<String>();
+
     /** Creates new form Sample */
     public Sample() {
         initComponents();
         populateMenus();
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -58,7 +71,7 @@ public class Sample extends javax.swing.JFrame {
         matchButton = new javax.swing.JButton();
         splitPane = new javax.swing.JSplitPane();
         listScroller = new javax.swing.JScrollPane();
-        resultsList = new javax.swing.JList();
+        resultsList = new javax.swing.JList<String>();
         textScroller = new javax.swing.JScrollPane();
         resultsText = new javax.swing.JTextPane();
         menuBar = new javax.swing.JMenuBar();
@@ -74,6 +87,7 @@ public class Sample extends javax.swing.JFrame {
 
         setTitle("Dict client sample");
         addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 exitForm(evt);
             }
@@ -123,6 +137,7 @@ public class Sample extends javax.swing.JFrame {
         defineButton.setMnemonic('D');
         defineButton.setText("Define");
         defineButton.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 defineButtonActionPerformed(evt);
             }
@@ -135,6 +150,7 @@ public class Sample extends javax.swing.JFrame {
         matchButton.setMnemonic('M');
         matchButton.setText("Match");
         matchButton.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 matchButtonActionPerformed(evt);
             }
@@ -147,13 +163,17 @@ public class Sample extends javax.swing.JFrame {
         splitPane.setDividerLocation(150);
         splitPane.setDividerSize(5);
         splitPane.setPreferredSize(new java.awt.Dimension(600, 400));
-        resultsList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        resultsList
+                .setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         resultsList.setToolTipText("Click on a definition to see the text");
-        resultsList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                resultsListValueChanged(evt);
-            }
-        });
+        resultsList
+                .addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+                    @Override
+                    public void valueChanged(
+                            javax.swing.event.ListSelectionEvent evt) {
+                        resultsListValueChanged(evt);
+                    }
+                });
 
         listScroller.setViewportView(resultsList);
 
@@ -181,6 +201,7 @@ public class Sample extends javax.swing.JFrame {
         fileMenu.setText("File");
         exitMenuItem.setText("Exit");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 exitMenuItemActionPerformed(evt);
             }
@@ -195,6 +216,7 @@ public class Sample extends javax.swing.JFrame {
         loginMenuItem.setMnemonic('L');
         loginMenuItem.setText("Login...");
         loginMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginMenuItemActionPerformed(evt);
             }
@@ -205,6 +227,7 @@ public class Sample extends javax.swing.JFrame {
         serverMenuItem.setMnemonic('V');
         serverMenuItem.setText("Server...");
         serverMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 serverMenuItemActionPerformed(evt);
             }
@@ -233,87 +256,94 @@ public class Sample extends javax.swing.JFrame {
 
         pack();
     }//GEN-END:initComponents
-    
+
     private void loginMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginMenuItemActionPerformed
         LoginDialog dlg = new LoginDialog(this);
-        dlg.show();
-        if(dlg.getReturnStatus() == dlg.RET_OK) {
+        dlg.setVisible(true);
+        if (dlg.getReturnStatus() == LoginDialog.RET_OK) {
             this.userName = dlg.getUserName();
             this.password = dlg.getPassword();
         }
         populateMenus();
     }//GEN-LAST:event_loginMenuItemActionPerformed
-    
+
     private void updateStatus() {
-        serverName.setText(hostName+":"+port);
+        serverName.setText(hostName + ":" + port);
         databaseName.setText(database);
         strategyName.setText(strategy);
     }
-    
+
     private void addDatabaseMenuItem(String code, String name, boolean chosen) {
         JRadioButtonMenuItem item = new JRadioButtonMenuItem(name);
         item.setSelected(chosen);
         item.setActionCommand(code);
         item.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectDatabaseActionPerformed(evt);
             }
         });
         databaseMenu.add(item);
         databaseButtonGroup.add(item);
-        if(chosen) {
+        if (chosen) {
             database = code;
         }
     }
-    
+
     private void addStrategyMenuItem(String code, String name, boolean chosen) {
         JRadioButtonMenuItem item = new JRadioButtonMenuItem(name);
         item.setSelected(chosen);
         item.setActionCommand(code);
         item.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 selectStrategyActionPerformed(evt);
             }
         });
         strategyMenu.add(item);
         strategyButtonGroup.add(item);
-        if(chosen) {
+        if (chosen) {
             strategy = code;
         }
     }
-    
+
     private void clearButtonGroup(ButtonGroup grp) {
-        Enumeration en = grp.getElements();
-        while(en.hasMoreElements()) {
-            grp.remove((JRadioButtonMenuItem)en.nextElement());
+        Enumeration<AbstractButton> en = grp.getElements();
+        while (en.hasMoreElements()) {
+            grp.remove(en.nextElement());
         }
     }
-    
+
     private void populateMenus() {
         try {
             DictClient client = new DictClient(hostName, port);
             try {
                 tryLogin(client);
-                Map databases = client.getDatabases();
+                final Map<String, String> databases = client.getDatabases();
                 databaseMenu.removeAll();
                 clearButtonGroup(databaseButtonGroup);
-                Iterator it = databases.entrySet().iterator();
-                addDatabaseMenuItem(DictClient.DATABASE_ALL, "All databases", false);
-                addDatabaseMenuItem(DictClient.DATABASE_FIRST, "First match", false);
+                Iterator<Entry<String, String>> it = databases.entrySet()
+                        .iterator();
+                addDatabaseMenuItem(DictClient.DATABASE_ALL, "All databases",
+                        false);
+                addDatabaseMenuItem(DictClient.DATABASE_FIRST, "First match",
+                        false);
                 boolean chosen = true;
-                while(it.hasNext()) {
-                    Map.Entry entry = (Map.Entry)it.next();
-                    addDatabaseMenuItem((String)entry.getKey(), (String)entry.getValue(), chosen);
+                while (it.hasNext()) {
+                    final Map.Entry<String, String> entry = it.next();
+                    addDatabaseMenuItem(entry.getKey(), entry.getValue(),
+                            chosen);
                     chosen = false;
                 }
-                Map strategies = client.getStrategies();
+                Map<String, String> strategies = client.getStrategies();
                 strategyMenu.removeAll();
                 clearButtonGroup(strategyButtonGroup);
                 it = strategies.entrySet().iterator();
-                addStrategyMenuItem(DictClient.STRATEGY_DEFAULT, "Server default", true);
-                while(it.hasNext()) {
-                    Map.Entry entry = (Map.Entry)it.next();
-                    addStrategyMenuItem((String)entry.getKey(), (String)entry.getValue(), false);
+                addStrategyMenuItem(DictClient.STRATEGY_DEFAULT,
+                        "Server default", true);
+                while (it.hasNext()) {
+                    Map.Entry<String, String> entry = it.next();
+                    addStrategyMenuItem(entry.getKey(), entry.getValue(), false);
                 }
                 updateStatus();
             } finally {
@@ -323,54 +353,54 @@ public class Sample extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e.toString());
         }
     }
-    
+
     private void selectDatabaseActionPerformed(java.awt.event.ActionEvent evt) {
         database = evt.getActionCommand();
         updateStatus();
     }
-    
+
     private void selectStrategyActionPerformed(java.awt.event.ActionEvent evt) {
         strategy = evt.getActionCommand();
         updateStatus();
     }
-    
-    
+
     private void tryLogin(DictClient client) throws DictException, IOException {
-        if(userName!=null && password!=null) {
+        if (userName != null && password != null) {
             client.auth(userName, password);
         }
     }
-    
-    
+
     private void serverMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serverMenuItemActionPerformed
         ServerDialog dlg = new ServerDialog(this);
-        dlg.show();
-        if(dlg.getReturnStatus() == dlg.RET_OK) {
+        dlg.setVisible(true);
+        if (dlg.getReturnStatus() == ServerDialog.RET_OK) {
             hostName = dlg.getHostName();
             port = dlg.getPort();
             try {
                 populateMenus();
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this,e.toString());
+                JOptionPane.showMessageDialog(this, e.toString());
             }
         }
     }//GEN-LAST:event_serverMenuItemActionPerformed
-    
+
     private void updatedLists() {
-        resultsList.setModel(new ListListModel(currentCodes));
+        resultsList.setModel(new ListListModel<String>(currentCodes));
     }
-    
+
     private void matchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_matchButtonActionPerformed
         try {
             DictClient client = new DictClient(hostName, port);
             tryLogin(client);
             try {
-                Map matches = client.getMatches(database, strategy, wordField.getText());
-                Iterator it = matches.entrySet().iterator();
+                final Map<String, List<String>> matches = client.getMatches(
+                        database, strategy, wordField.getText());
+                final Iterator<Entry<String, List<String>>> it = matches
+                        .entrySet().iterator();
                 currentValues.clear();
                 currentCodes.clear();
-                while(it.hasNext()) {
-                    Map.Entry entry = (Map.Entry)it.next();
+                while (it.hasNext()) {
+                    final Map.Entry<String, List<String>> entry = it.next();
                     currentCodes.add(entry.getKey());
                     currentValues.add(entry.getValue().toString());
                 }
@@ -379,23 +409,23 @@ public class Sample extends javax.swing.JFrame {
                 client.close();
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,e.toString());
+            JOptionPane.showMessageDialog(this, e.toString());
         }
     }//GEN-LAST:event_matchButtonActionPerformed
-    
+
     private void defineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defineButtonActionPerformed
         try {
             DictClient client = new DictClient(hostName, port);
             tryLogin(client);
             try {
-                List defs = client.getDefinitions(database, wordField.getText());
-                Iterator it = defs.iterator();
+                List<DefinitionResponse> defs = client.getDefinitions(database,
+                        wordField.getText());
+                Iterator<DefinitionResponse> it = defs.iterator();
                 currentValues.clear();
                 currentCodes.clear();
-                int count = 0;
-                while(it.hasNext()) {
-                    DefinitionResponse def = (DefinitionResponse)it.next();
-                    currentCodes.add(def.getDatabase()+":"+def.getWord());
+                while (it.hasNext()) {
+                    DefinitionResponse def = it.next();
+                    currentCodes.add(def.getDatabase() + ":" + def.getWord());
                     currentValues.add(def.getTextualInformation());
                 }
                 updatedLists();
@@ -403,36 +433,37 @@ public class Sample extends javax.swing.JFrame {
                 client.close();
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,e.toString());
+            JOptionPane.showMessageDialog(this, e.toString());
         }
-        
+
     }//GEN-LAST:event_defineButtonActionPerformed
-    
-    private void resultsListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_resultsListValueChanged
+
+    private void resultsListValueChanged(
+            javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_resultsListValueChanged
         int index = resultsList.getSelectedIndex();
-        if(index >= 0) {
-            resultsText.setText((String)currentValues.get(index));
+        if (index >= 0) {
+            resultsText.setText(currentValues.get(index));
         } else {
             resultsText.setText("");
         }
     }//GEN-LAST:event_resultsListValueChanged
-    
+
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
-    
+
     /** Exit the Application */
     private void exitForm(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_exitForm
         System.exit(0);
     }//GEN-LAST:event_exitForm
-    
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) throws Exception {
-        new Sample().show();
+        new Sample().setVisible(true);
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.ButtonGroup databaseButtonGroup;
@@ -450,7 +481,7 @@ public class Sample extends javax.swing.JFrame {
     private javax.swing.JButton matchButton;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu optionsMenu;
-    private javax.swing.JList resultsList;
+    private javax.swing.JList<String> resultsList;
     private javax.swing.JTextPane resultsText;
     private javax.swing.JLabel serverLabel;
     private javax.swing.JMenuItem serverMenuItem;
@@ -464,5 +495,5 @@ public class Sample extends javax.swing.JFrame {
     private javax.swing.JTextField wordField;
     private javax.swing.JLabel wordLabel;
     // End of variables declaration//GEN-END:variables
-    
+
 }

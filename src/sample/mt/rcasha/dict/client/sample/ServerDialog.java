@@ -12,16 +12,17 @@ package mt.rcasha.dict.client.sample;
  * Dialog to choose a server/port
  * @author Ramon Casha (ramon.casha@linux.org.mt)
  */
+@SuppressWarnings("serial")
 public class ServerDialog extends javax.swing.JDialog {
-    
+
     private String hostName;
     private int port;
-    
+
     /** A return status code - returned if Cancel button has been pressed */
     public static final int RET_CANCEL = 0;
     /** A return status code - returned if OK button has been pressed */
     public static final int RET_OK = 1;
-    
+
     /** Creates new form ServerDialog */
     public ServerDialog(Sample parent) {
         super(parent, true);
@@ -29,12 +30,12 @@ public class ServerDialog extends javax.swing.JDialog {
         setPort(parent.port);
         initComponents();
     }
-    
+
     /** @return the return status of this dialog - one of RET_OK or RET_CANCEL */
     public int getReturnStatus() {
         return returnStatus;
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -54,16 +55,19 @@ public class ServerDialog extends javax.swing.JDialog {
 
         setTitle("Specify Dict server");
         addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
             }
         });
 
-        buttonPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+        buttonPanel
+                .setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         okButton.setMnemonic('O');
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
             }
@@ -74,6 +78,7 @@ public class ServerDialog extends javax.swing.JDialog {
         cancelButton.setMnemonic('C');
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelButtonActionPerformed(evt);
             }
@@ -95,7 +100,8 @@ public class ServerDialog extends javax.swing.JDialog {
         jPanel1.add(hostLabel, gridBagConstraints);
 
         hostField.setText(getHostName());
-        hostField.setToolTipText("Enter the host name or IP address for your dict server.");
+        hostField
+                .setToolTipText("Enter the host name or IP address for your dict server.");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -113,7 +119,8 @@ public class ServerDialog extends javax.swing.JDialog {
         gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 0);
         jPanel1.add(portLabel, gridBagConstraints);
 
-        portField.setToolTipText("Enter the port number on the server. Usually 6268");
+        portField
+                .setToolTipText("Enter the port number on the server. Usually 6268");
         portField.setValue(new Integer(getPort()));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -126,26 +133,26 @@ public class ServerDialog extends javax.swing.JDialog {
 
         pack();
     }//GEN-END:initComponents
-    
+
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         doClose(RET_OK);
     }//GEN-LAST:event_okButtonActionPerformed
-    
+
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         doClose(RET_CANCEL);
     }//GEN-LAST:event_cancelButtonActionPerformed
-    
+
     /** Closes the dialog */
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
         doClose(RET_CANCEL);
     }//GEN-LAST:event_closeDialog
-    
+
     private void doClose(int retStatus) {
         returnStatus = retStatus;
         setVisible(false);
         dispose();
     }
-    
+
     /** Getter for property hostName.
      * @return Value of property hostName.
      *
@@ -153,7 +160,7 @@ public class ServerDialog extends javax.swing.JDialog {
     public java.lang.String getHostName() {
         return hostName;
     }
-    
+
     /** Setter for property hostName.
      * @param hostName New value of property hostName.
      *
@@ -161,7 +168,7 @@ public class ServerDialog extends javax.swing.JDialog {
     public void setHostName(java.lang.String hostName) {
         this.hostName = hostName;
     }
-    
+
     /** Getter for property port.
      * @return Value of property port.
      *
@@ -169,7 +176,7 @@ public class ServerDialog extends javax.swing.JDialog {
     public int getPort() {
         return port;
     }
-    
+
     /** Setter for property port.
      * @param port New value of property port.
      *
@@ -177,7 +184,7 @@ public class ServerDialog extends javax.swing.JDialog {
     public void setPort(int port) {
         this.port = port;
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JButton cancelButton;
@@ -188,6 +195,6 @@ public class ServerDialog extends javax.swing.JDialog {
     private javax.swing.JSpinner portField;
     private javax.swing.JLabel portLabel;
     // End of variables declaration//GEN-END:variables
-    
+
     private int returnStatus = RET_CANCEL;
 }
