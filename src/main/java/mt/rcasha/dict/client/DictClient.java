@@ -58,7 +58,7 @@ public class DictClient {
     private static final Log log = LogFactory.getLog(DictClient.class);
 
     /** The string by which this client identifies itself */
-    public static final String USER_AGENT = "CLIENT JDict 1.0";
+    public static final String USER_AGENT = "CLIENT \"JDict 1.0\"";
     
     /** Return a definition from the first database containing the word */
     public static final String DATABASE_FIRST = "!";
@@ -373,5 +373,5 @@ public class DictClient {
     public void setThrowExceptions(boolean throwExceptions) {
         this.throwExceptions = throwExceptions;
     }
-    
+
 }
