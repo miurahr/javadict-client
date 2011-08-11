@@ -17,7 +17,7 @@ import javax.swing.AbstractListModel;
  * @author Ramon Casha (ramon.casha@linux.org.mt)
  */
 @SuppressWarnings("serial")
-public class ListListModel<E> extends AbstractListModel<E> {
+public class ListListModel<E> extends AbstractListModel {
 
     private final List<E> list;
 

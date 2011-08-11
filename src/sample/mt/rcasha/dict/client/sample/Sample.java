@@ -71,7 +71,7 @@ public class Sample extends javax.swing.JFrame {
         matchButton = new javax.swing.JButton();
         splitPane = new javax.swing.JSplitPane();
         listScroller = new javax.swing.JScrollPane();
-        resultsList = new javax.swing.JList<String>();
+        resultsList = new javax.swing.JList();
         textScroller = new javax.swing.JScrollPane();
         resultsText = new javax.swing.JTextPane();
         menuBar = new javax.swing.JMenuBar();
@@ -481,7 +481,7 @@ public class Sample extends javax.swing.JFrame {
     private javax.swing.JButton matchButton;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenu optionsMenu;
-    private javax.swing.JList<String> resultsList;
+    private javax.swing.JList resultsList;
     private javax.swing.JTextPane resultsText;
     private javax.swing.JLabel serverLabel;
     private javax.swing.JMenuItem serverMenuItem;
