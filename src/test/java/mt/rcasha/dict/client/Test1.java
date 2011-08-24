@@ -6,6 +6,14 @@ import org.junit.Test;
 
 public class Test1 {
 
+    // possibly self contained tests could be performed using a local dict server:
+    // https://sourceforge.net/projects/javadictd/ (last update 2009-07-17, Changelog 2003-10-02)
+    // http://ktulu.com.ar/blog/projects/javadictd/
+    // Another one:
+    // http://www.informatik.uni-leipzig.de/~duc/Java/JDictd/
+    // someone branched it:
+    // http://code.google.com/p/jdictserver/ (last update 2009-09-21)
+
     @Test
     public void testCase1() throws Exception {
 
@@ -19,7 +27,8 @@ public class Test1 {
         // System.out.println(dr.getTextualInformation());
         // }
         final String EXPECT_STRING = "DEFINE database word";
-        assertEquals(EXPECT_STRING, client.getHelp().substring(0, EXPECT_STRING.length()));
+        assertEquals(EXPECT_STRING,
+                client.getHelp().substring(0, EXPECT_STRING.length()));
 
     }
 }
