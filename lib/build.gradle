@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+    id 'java-library'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'commons-logging:commons-logging:1.1.1'
+    testImplementation 'junit:junit:4.8.2'
+}
+
+group = 'javadict'
+version = '1.0-SNAPSHOT'
+description = 'JavaDict-Client'
+sourceCompatibility = '1.8'
