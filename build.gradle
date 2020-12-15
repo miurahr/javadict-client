@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'org.slf4j:slf4j-jdk14:1.7.25'
+    testImplementation 'junit:junit:4.8.2'
+}
+
+group = 'javadict'
+version = '1.0-SNAPSHOT'
+description = 'JavaDict-Client'
+sourceCompatibility = '1.8'

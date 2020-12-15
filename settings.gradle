@@ -1,2 +1,1 @@
-rootProject.name = 'javadict-client'
-include 'sample', 'lib'
+rootProject.name = 'dictclient'
