@@ -27,7 +27,7 @@ public class ShutDown {
 			os.flush();
 			os.close();
 			String host = System.getProperty("host", "localhost");
-			int port = Integer.getInteger("port", 8080).intValue();
+			int port = Integer.getInteger("port", 8080);
 			URL url = new URL("http", host, port, "/admin?cmd=shutdown&password="+passwd);			
 			InputStream is = url.openStream();
 			int c;
