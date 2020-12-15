@@ -14,5 +14,5 @@ dependencies {
 
 group = 'javadict'
 version = '1.0-SNAPSHOT'
-description = 'JavaDict-Client'
+description = 'dictclient'
 sourceCompatibility = '1.8'
