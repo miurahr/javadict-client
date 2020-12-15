@@ -19,7 +19,7 @@ public class WordPosition implements IWordPosition {
 	/**
 	 * getKey method comment.
 	 */
-	public String getKey() {
+	public java.lang.String getKey() {
 		return fKey;
 	}
 	/**
